@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">Pós-Vendas Seminovos</string>
+
+    <!-- Login -->
+    <string name="login_titulo">Pós-Vendas Seminovos</string>
+    <string name="login_subtitulo">Acesso do funcionário</string>
+    <string name="login_usuario">Usuário</string>
+    <string name="login_senha">Senha</string>
+    <string name="login_entrar">Entrar</string>
+    <string name="login_dica">Padrão: admin / admin123</string>
+
+    <!-- Menu -->
+    <string name="menu_titulo">Menu Principal</string>
+    <string name="menu_clientes">Clientes</string>
+    <string name="menu_veiculos">Veículos</string>
+    <string name="menu_ocorrencias">Ocorrências</string>
+    <string name="menu_agenda">Agenda</string>
+    <string name="menu_relatorio">Relatório</string>
+
+    <!-- Botões comuns -->
+    <string name="btn_salvar">Salvar</string>
+    <string name="btn_atualizar">Atualizar</string>
+    <string name="btn_limpar">Limpar</string>
+
+    <!-- Clientes -->
+    <string name="clientes_titulo">Cadastro de Clientes</string>
+    <string name="cliente_nome">Nome</string>
+    <string name="cliente_telefone">Telefone</string>
+    <string name="cliente_email">E-mail</string>
+    <string name="clientes_lista">Clientes cadastrados</string>
+
+    <!-- Veículos -->
+    <string name="veiculos_titulo">Cadastro de Veículos</string>
+    <string name="veiculo_cliente">Cliente (dono)</string>
+    <string name="veiculo_modelo">Modelo</string>
+    <string name="veiculo_ano">Ano</string>
+    <string name="veiculo_chassi">Chassi (17 caracteres)</string>
+    <string name="veiculo_placa">Placa</string>
+    <string name="veiculo_data_retirada">Data de retirada</string>
+    <string name="veiculo_garantia">Garantia adicional (opcional)</string>
+    <string name="veiculo_tirar_foto">Tirar foto do veículo</string>
+    <string name="veiculos_lista">Veículos cadastrados</string>
+
+    <!-- Ocorrências -->
+    <string name="ocorrencias_titulo">Registro de Ocorrências</string>
+    <string name="ocorrencia_veiculo">Veículo</string>
+    <string name="ocorrencia_descricao">Descreva o problema</string>
+    <string name="ocorrencia_registrar">Registrar ocorrência</string>
+    <string name="ocorrencias_lista">Ocorrências registradas</string>
+
+    <!-- Agenda -->
+    <string name="agenda_titulo">Agenda do Mecânico</string>
+    <string name="agenda_abertas">Aguardando diagnóstico</string>
+    <string name="agenda_agendadas">Diagnósticos agendados</string>
+    <string name="agenda_agendar">Agendar</string>
+
+    <!-- Relatório -->
+    <string name="relatorio_titulo">Relatório de Ocorrências</string>
+    <string name="relatorio_gerar">Gerar relatório (.txt)</string>
+    <string name="relatorio_carregar">Carregar relatório</string>
+    <string name="relatorio_vazio">O conteúdo do relatório aparecerá aqui.</string>
+
+    <!-- Itens de lista -->
+    <string name="acao_excluir">Excluir</string>
+    <string name="desc_foto_veiculo">Foto do veículo</string>
+</resources>

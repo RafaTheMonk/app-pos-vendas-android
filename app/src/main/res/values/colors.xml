@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Cores da marca (tema automotivo: azul) -->
+    <color name="brand_primary">#1565C0</color>
+    <color name="brand_primary_dark">#0D47A1</color>
+    <color name="brand_secondary">#37474F</color>
+    <color name="fundo_tela">#F2F4F7</color>
+    <color name="texto_secundario">#5F6B7A</color>
+
+    <!-- Cores de status das ocorrências -->
+    <color name="status_aberta">#E65100</color>   <!-- laranja -->
+    <color name="status_agendada">#2E7D32</color> <!-- verde -->
+</resources>

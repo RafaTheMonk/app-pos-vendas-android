@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Menu principal. IDs: btnClientes, btnVeiculos, btnOcorrencias, btnAgenda, btnRelatorio. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_tela"
+    android:orientation="vertical">
+
+    <!-- Cabeçalho colorido. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/brand_primary"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_titulo"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingVertical="20dp"
+            android:text="@string/menu_clientes"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_clientes"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVeiculos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingVertical="20dp"
+            android:text="@string/menu_veiculos"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_veiculo"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOcorrencias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingVertical="20dp"
+            android:text="@string/menu_ocorrencias"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_ocorrencias"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAgenda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingVertical="20dp"
+            android:text="@string/menu_agenda"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_agenda"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRelatorio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:paddingVertical="20dp"
+            android:text="@string/menu_relatorio"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_relatorio"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp" />
+    </LinearLayout>
+</LinearLayout>

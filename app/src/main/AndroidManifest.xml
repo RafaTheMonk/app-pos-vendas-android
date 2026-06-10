@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissão de câmera (solicitada também em tempo de execução). -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Leitura de imagens: API 33+ usa READ_MEDIA_IMAGES; APIs antigas usam
+         READ_EXTERNAL_STORAGE (limitado até a API 32 pelo maxSdkVersion). -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!-- Declara que o app usa câmera, mas não a exige (required=false) para
+         continuar instalável em dispositivos/emuladores sem câmera. -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PosVendas">
+
+        <!-- Tela inicial: LoginActivity (LAUNCHER). -->
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.MenuActivity" android:exported="false" />
+        <activity android:name=".activities.ClientesActivity" android:exported="false" />
+        <activity android:name=".activities.VeiculosActivity" android:exported="false" />
+        <activity android:name=".activities.OcorrenciasActivity" android:exported="false" />
+        <activity android:name=".activities.AgendaActivity" android:exported="false" />
+        <activity android:name=".activities.RelatorioActivity" android:exported="false" />
+    </application>
+
+</manifest>
