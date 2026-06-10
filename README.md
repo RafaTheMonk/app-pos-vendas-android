@@ -240,25 +240,7 @@ depender de tela). A formatação em reais usa `Locale("pt","BR")` → `R$ 150,0
 
 ---
 
-## 9. Roteiro sugerido para a apresentação
-
-1. Mostrar o **login** com `admin / admin123` e explicar o `SELECT` de validação.
-2. Cadastrar um **cliente** (mostrar INSERT, depois editar = UPDATE, depois a
-   confirmação de exclusão com AlertDialog).
-3. Cadastrar um **veículo** desse cliente:
-   - escolher o cliente no Spinner,
-   - escolher a data no DatePicker,
-   - **tirar a foto** (mostrar o pedido de permissão da câmera),
-   - tentar salvar uma **placa repetida** para mostrar o tratamento do UNIQUE.
-4. Registrar uma **ocorrência** para o veículo (status ABERTA, em laranja).
-5. Ir na **Agenda**, agendar o diagnóstico (status vira AGENDADA, em verde) —
-   explicar que aqui há um **JOIN das 3 tabelas**.
-6. Gerar e carregar o **relatório .txt** (FileOutputStream / FileInputStream).
-7. Fechar e reabrir o app para provar que **os dados persistem** e a **foto volta**.
-
----
-
-## 10. Critérios de aceite atendidos
+## 9. Critérios de aceite atendidos
 
 - ✔ Compila e roda em API 24+ sem ajuste manual (`BUILD SUCCESSFUL`).
 - ✔ Login `admin/admin123` funciona no primeiro boot.
