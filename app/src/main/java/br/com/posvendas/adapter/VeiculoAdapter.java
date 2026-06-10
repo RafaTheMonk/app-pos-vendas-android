@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.posvendas.R;
 import br.com.posvendas.model.Veiculo;
@@ -55,6 +57,20 @@ public class VeiculoAdapter extends RecyclerView.Adapter<VeiculoAdapter.VeiculoV
         holder.tvPlaca.setText("Placa: " + veiculo.getPlaca());
         holder.tvDono.setText("Dono: " + veiculo.getClienteNome());
 
+        // Situação da garantia: fora da garantia mostra a cobrança em laranja,
+        // dentro da garantia mostra "Na garantia" em verde.
+        int cor;
+        if (veiculo.getValorCobranca() > 0) {
+            holder.tvCobranca.setText("Fora da garantia · "
+                    + formatarValor(veiculo.getValorCobranca()));
+            cor = R.color.status_aberta;
+        } else {
+            holder.tvCobranca.setText("Na garantia");
+            cor = R.color.status_agendada;
+        }
+        holder.tvCobranca.setTextColor(
+                ContextCompat.getColor(holder.itemView.getContext(), cor));
+
         // Carrega a miniatura a partir do caminho salvo no banco.
         carregarMiniatura(holder.ivMiniatura, veiculo.getFotoCaminho());
 
@@ -92,6 +108,11 @@ public class VeiculoAdapter extends RecyclerView.Adapter<VeiculoAdapter.VeiculoV
         imageView.setImageResource(R.drawable.ic_veiculo);
     }
 
+    /** Formata um valor em reais no padrão brasileiro (ex.: R$ 300,00). */
+    private String formatarValor(double valor) {
+        return String.format(new Locale("pt", "BR"), "R$ %.2f", valor);
+    }
+
     @Override
     public int getItemCount() {
         return veiculos.size();
@@ -102,6 +123,7 @@ public class VeiculoAdapter extends RecyclerView.Adapter<VeiculoAdapter.VeiculoV
         TextView tvModeloPlaca;
         TextView tvPlaca;
         TextView tvDono;
+        TextView tvCobranca;
         ImageButton btnExcluir;
 
         VeiculoViewHolder(@NonNull View itemView) {
@@ -110,6 +132,7 @@ public class VeiculoAdapter extends RecyclerView.Adapter<VeiculoAdapter.VeiculoV
             tvModeloPlaca = itemView.findViewById(R.id.tvModeloPlaca);
             tvPlaca = itemView.findViewById(R.id.tvPlacaItem);
             tvDono = itemView.findViewById(R.id.tvDono);
+            tvCobranca = itemView.findViewById(R.id.tvVeiculoCobranca);
             btnExcluir = itemView.findViewById(R.id.btnExcluirVeiculo);
         }
     }

@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +49,15 @@ public class OcorrenciasActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocorrencias);
+
+        // Toolbar com seta de voltar: encerra a tela e retorna ao menu.
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         bd = new DatabaseHelper(this);
 
@@ -102,10 +113,13 @@ public class OcorrenciasActivity extends AppCompatActivity
         ocorrencia.setDataRegistro(dataDeHoje());          // data automática
         ocorrencia.setStatus(Ocorrencia.STATUS_ABERTA);    // status inicial
         ocorrencia.setDataDiagnostico(null);               // ainda não agendada
+        // Valor fixo do diagnóstico do mecânico, gerado automaticamente.
+        ocorrencia.setValorDiagnostico(Ocorrencia.VALOR_DIAGNOSTICO);
 
         long id = bd.inserirOcorrencia(ocorrencia);
         if (id != -1) {
-            Toast.makeText(this, "Ocorrência registrada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ocorrência registrada\nDiagnóstico: "
+                    + formatarValor(Ocorrencia.VALOR_DIAGNOSTICO), Toast.LENGTH_LONG).show();
             etDescricao.setText("");
             recarregarLista();
         } else {
@@ -117,6 +131,11 @@ public class OcorrenciasActivity extends AppCompatActivity
     private String dataDeHoje() {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return formato.format(new Date());
+    }
+
+    /** Formata um valor em reais no padrão brasileiro (ex.: R$ 150,00). */
+    private String formatarValor(double valor) {
+        return String.format(new Locale("pt", "BR"), "R$ %.2f", valor);
     }
 
     /** Lixeira: confirma com AlertDialog e exclui. */

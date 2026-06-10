@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Locale;
 
 import br.com.posvendas.R;
 import br.com.posvendas.model.Ocorrencia;
@@ -51,6 +52,9 @@ public class OcorrenciaAdapter extends RecyclerView.Adapter<OcorrenciaAdapter.Oc
         holder.tvDescricao.setText(ocorrencia.getDescricao());
         holder.tvData.setText("Registrada em " + ocorrencia.getDataRegistro());
         holder.tvStatus.setText(ocorrencia.getStatus());
+        holder.tvValor.setText("Diagnóstico: "
+                + String.format(new Locale("pt", "BR"), "R$ %.2f",
+                ocorrencia.getValorDiagnostico()));
 
         // Pinta o status conforme o valor: ABERTA = laranja, AGENDADA = verde.
         int cor;
@@ -80,6 +84,7 @@ public class OcorrenciaAdapter extends RecyclerView.Adapter<OcorrenciaAdapter.Oc
         TextView tvDescricao;
         TextView tvData;
         TextView tvStatus;
+        TextView tvValor;
         ImageButton btnExcluir;
 
         OcorrenciaViewHolder(@NonNull View itemView) {
@@ -89,6 +94,7 @@ public class OcorrenciaAdapter extends RecyclerView.Adapter<OcorrenciaAdapter.Oc
             tvDescricao = itemView.findViewById(R.id.tvOcDescricao);
             tvData = itemView.findViewById(R.id.tvOcData);
             tvStatus = itemView.findViewById(R.id.tvOcStatus);
+            tvValor = itemView.findViewById(R.id.tvOcValor);
             btnExcluir = itemView.findViewById(R.id.btnExcluirOcorrencia);
         }
     }

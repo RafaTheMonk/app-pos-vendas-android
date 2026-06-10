@@ -36,6 +36,9 @@
         </activity>
 
         <activity android:name=".activities.MenuActivity" android:exported="false" />
+
+        <!-- Painel/Dashboard: tela adicional (somente leitura), aberta pelo menu. -->
+        <activity android:name=".activities.DashboardActivity" android:exported="false" />
         <activity android:name=".activities.ClientesActivity" android:exported="false" />
         <activity android:name=".activities.VeiculosActivity" android:exported="false" />
         <activity android:name=".activities.OcorrenciasActivity" android:exported="false" />

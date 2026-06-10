@@ -66,6 +66,15 @@
                 android:textStyle="bold"
                 tools:text="ABERTA"
                 tools:textColor="@color/status_aberta" />
+
+            <TextView
+                android:id="@+id/tvOcValor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/texto_secundario"
+                android:textSize="12sp"
+                tools:text="Diagnóstico: R$ 150,00" />
         </LinearLayout>
 
         <ImageButton

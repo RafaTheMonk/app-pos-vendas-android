@@ -21,11 +21,19 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        MaterialButton btnPainel = findViewById(R.id.btnPainel);
         MaterialButton btnClientes = findViewById(R.id.btnClientes);
         MaterialButton btnVeiculos = findViewById(R.id.btnVeiculos);
         MaterialButton btnOcorrencias = findViewById(R.id.btnOcorrencias);
         MaterialButton btnAgenda = findViewById(R.id.btnAgenda);
         MaterialButton btnRelatorio = findViewById(R.id.btnRelatorio);
+
+        btnPainel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrir(DashboardActivity.class);
+            }
+        });
 
         btnClientes.setOnClickListener(new View.OnClickListener() {
             @Override

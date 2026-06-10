@@ -63,4 +63,16 @@
     <!-- Itens de lista -->
     <string name="acao_excluir">Excluir</string>
     <string name="desc_foto_veiculo">Foto do veículo</string>
+    <string name="voltar">Voltar</string>
+
+    <!-- Painel / Dashboard -->
+    <string name="dashboard_titulo">Painel Pós-Vendas</string>
+    <string name="menu_painel">Painel</string>
+    <string name="dash_clientes">Clientes</string>
+    <string name="dash_veiculos">Veículos</string>
+    <string name="dash_abertas">Ocorrências abertas</string>
+    <string name="dash_agendadas">Diagnósticos agendados</string>
+    <string name="dash_total">Total de ocorrências</string>
+    <string name="dash_resumo">Resumo geral do sistema</string>
+    <string name="dash_atualizar">Atualizar</string>
 </resources>

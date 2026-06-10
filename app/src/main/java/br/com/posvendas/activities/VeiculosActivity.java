@@ -30,10 +30,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -115,6 +118,15 @@ public class VeiculosActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_veiculos);
+
+        // Toolbar com seta de voltar: encerra a tela e retorna ao menu.
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         bd = new DatabaseHelper(this);
 
@@ -292,7 +304,13 @@ public class VeiculosActivity extends AppCompatActivity
             // -1 aqui significa que o chassi ou a placa já existem (UNIQUE).
             Toast.makeText(this, "Chassi ou placa já cadastrados", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "Veículo salvo com sucesso", Toast.LENGTH_SHORT).show();
+            String mensagem = "Veículo salvo com sucesso";
+            if (veiculo.getValorCobranca() > 0) {
+                // Fora da garantia: avisa o valor gerado para o cliente.
+                mensagem += "\nFora da garantia: cobrança de "
+                        + formatarValor(veiculo.getValorCobranca());
+            }
+            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
             limparFormulario();
             recarregarLista();
         }
@@ -335,6 +353,11 @@ public class VeiculosActivity extends AppCompatActivity
         veiculo.setDataRetirada(etDataRetirada.getText().toString().trim());
         veiculo.setGarantiaAdicional(etGarantia.getText().toString().trim());
         veiculo.setFotoCaminho(fotoCaminhoAtual);
+
+        // Veículo cadastrado fora da garantia gera cobrança fixa para o cliente.
+        boolean foraDaGarantia = Veiculo.estaForaDaGarantia(
+                veiculo.getDataRetirada(), veiculo.getGarantiaAdicional(), new Date());
+        veiculo.setValorCobranca(foraDaGarantia ? Veiculo.VALOR_COBRANCA_FORA_GARANTIA : 0);
         return veiculo;
     }
 
@@ -447,6 +470,11 @@ public class VeiculosActivity extends AppCompatActivity
             }
         }
         ivFoto.setImageResource(R.drawable.ic_veiculo);
+    }
+
+    /** Formata um valor em reais no padrão brasileiro (ex.: R$ 300,00). */
+    private String formatarValor(double valor) {
+        return String.format(new Locale("pt", "BR"), "R$ %.2f", valor);
     }
 
     private void recarregarLista() {

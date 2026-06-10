@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Nome do arquivo de banco e versão (incrementar a versão dispara onUpgrade).
     private static final String NOME_BANCO = "posvendas.db";
-    private static final int VERSAO_BANCO = 1;
+    private static final int VERSAO_BANCO = 2;
 
     // Nomes das tabelas centralizados em constantes (evita erro de digitação).
     public static final String TABELA_USUARIOS = "usuarios";
@@ -77,6 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "data_retirada TEXT NOT NULL, " +
                 "garantia_adicional TEXT, " +
                 "foto_caminho TEXT, " +
+                "valor_cobranca REAL NOT NULL DEFAULT 0, " +
                 "FOREIGN KEY (cliente_id) REFERENCES " + TABELA_CLIENTES + "(id)" +
                 ");");
 
@@ -88,6 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "data_registro TEXT NOT NULL, " +
                 "status TEXT NOT NULL DEFAULT 'ABERTA', " +
                 "data_diagnostico TEXT, " +
+                "valor_diagnostico REAL NOT NULL DEFAULT 0, " +
                 "FOREIGN KEY (veiculo_id) REFERENCES " + TABELA_VEICULOS + "(id)" +
                 ");");
 
@@ -234,6 +236,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         valores.put("data_retirada", veiculo.getDataRetirada());
         valores.put("garantia_adicional", veiculo.getGarantiaAdicional());
         valores.put("foto_caminho", veiculo.getFotoCaminho());
+        valores.put("valor_cobranca", veiculo.getValorCobranca());
         return valores;
     }
 
@@ -254,7 +257,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(
                 "SELECT v.id, v.cliente_id, v.modelo, v.ano, v.chassi, v.placa, " +
-                        "v.data_retirada, v.garantia_adicional, v.foto_caminho, c.nome " +
+                        "v.data_retirada, v.garantia_adicional, v.foto_caminho, " +
+                        "v.valor_cobranca, c.nome " +
                         "FROM " + TABELA_VEICULOS + " v " +
                         "INNER JOIN " + TABELA_CLIENTES + " c ON v.cliente_id = c.id " +
                         "ORDER BY v.modelo", null);
@@ -270,7 +274,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             v.setDataRetirada(cursor.getString(6));
             v.setGarantiaAdicional(cursor.getString(7));
             v.setFotoCaminho(cursor.getString(8));
-            v.setClienteNome(cursor.getString(9));
+            v.setValorCobranca(cursor.getDouble(9));
+            v.setClienteNome(cursor.getString(10));
             lista.add(v);
         }
         cursor.close();
@@ -290,6 +295,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         valores.put("data_registro", ocorrencia.getDataRegistro());
         valores.put("status", ocorrencia.getStatus());
         valores.put("data_diagnostico", ocorrencia.getDataDiagnostico());
+        valores.put("valor_diagnostico", ocorrencia.getValorDiagnostico());
         return db.insert(TABELA_OCORRENCIAS, null, valores);
     }
 
@@ -335,7 +341,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT o.id, o.veiculo_id, o.descricao, o.data_registro, " +
-                "o.status, o.data_diagnostico, c.nome, v.modelo, v.placa " +
+                "o.status, o.data_diagnostico, o.valor_diagnostico, " +
+                "c.nome, v.modelo, v.placa " +
                 "FROM " + TABELA_OCORRENCIAS + " o " +
                 "INNER JOIN " + TABELA_VEICULOS + " v ON o.veiculo_id = v.id " +
                 "INNER JOIN " + TABELA_CLIENTES + " c ON v.cliente_id = c.id ";
@@ -358,9 +365,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             o.setDataRegistro(cursor.getString(3));
             o.setStatus(cursor.getString(4));
             o.setDataDiagnostico(cursor.getString(5));
-            o.setClienteNome(cursor.getString(6));
-            o.setVeiculoModelo(cursor.getString(7));
-            o.setPlaca(cursor.getString(8));
+            o.setValorDiagnostico(cursor.getDouble(6));
+            o.setClienteNome(cursor.getString(7));
+            o.setVeiculoModelo(cursor.getString(8));
+            o.setPlaca(cursor.getString(9));
             lista.add(o);
         }
         cursor.close();

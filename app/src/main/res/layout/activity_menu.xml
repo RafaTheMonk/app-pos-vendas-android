@@ -38,6 +38,19 @@
         android:padding="20dp">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPainel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:gravity="start|center_vertical"
+            android:paddingVertical="20dp"
+            android:text="@string/menu_painel"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_relatorio"
+            app:iconGravity="textStart"
+            app:iconPadding="16dp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClientes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

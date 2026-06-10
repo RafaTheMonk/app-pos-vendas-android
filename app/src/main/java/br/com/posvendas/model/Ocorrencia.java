@@ -11,12 +11,16 @@ public class Ocorrencia {
     public static final String STATUS_ABERTA = "ABERTA";
     public static final String STATUS_AGENDADA = "AGENDADA";
 
+    // Valor fixo cobrado pelo diagnóstico do mecânico em toda ocorrência.
+    public static final double VALOR_DIAGNOSTICO = 150.0;
+
     private int id;
     private int veiculoId;
     private String descricao;
     private String dataRegistro;    // formato dd/MM/yyyy (data atual no INSERT)
     private String status;          // ABERTA ou AGENDADA
     private String dataDiagnostico; // formato dd/MM/yyyy (null enquanto não agendada)
+    private double valorDiagnostico; // R$ fixo do diagnóstico do mecânico
 
     // Campos de apoio (vêm do JOIN, não são colunas da tabela)
     private String clienteNome;
@@ -72,6 +76,14 @@ public class Ocorrencia {
 
     public void setDataDiagnostico(String dataDiagnostico) {
         this.dataDiagnostico = dataDiagnostico;
+    }
+
+    public double getValorDiagnostico() {
+        return valorDiagnostico;
+    }
+
+    public void setValorDiagnostico(double valorDiagnostico) {
+        this.valorDiagnostico = valorDiagnostico;
     }
 
     public String getClienteNome() {

@@ -58,6 +58,16 @@
                 android:textColor="@color/texto_secundario"
                 android:textSize="13sp"
                 tools:text="Dono: Fulano" />
+
+            <TextView
+                android:id="@+id/tvVeiculoCobranca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="Fora da garantia · R$ 300,00"
+                tools:textColor="@color/status_aberta" />
         </LinearLayout>
 
         <ImageButton

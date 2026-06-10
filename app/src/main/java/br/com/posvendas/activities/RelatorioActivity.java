@@ -8,10 +8,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import br.com.posvendas.DatabaseHelper;
@@ -37,6 +41,15 @@ public class RelatorioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relatorio);
+
+        // Toolbar com seta de voltar: encerra a tela e retorna ao menu.
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         bd = new DatabaseHelper(this);
 
@@ -75,11 +88,14 @@ public class RelatorioActivity extends AppCompatActivity {
         } else {
             for (Ocorrencia o : ocorrencias) {
                 String diagnostico = (o.getDataDiagnostico() == null) ? "-" : o.getDataDiagnostico();
+                String valor = String.format(new java.util.Locale("pt", "BR"),
+                        "R$ %.2f", o.getValorDiagnostico());
                 conteudo.append("Cliente: ").append(o.getClienteNome())
                         .append(" | Veículo: ").append(o.getVeiculoModelo())
                         .append(" | Problema: ").append(o.getDescricao())
                         .append(" | Status: ").append(o.getStatus())
                         .append(" | Diagnóstico: ").append(diagnostico)
+                        .append(" | Valor: ").append(valor)
                         .append("\n");
             }
         }
@@ -87,7 +103,8 @@ public class RelatorioActivity extends AppCompatActivity {
         // Grava o arquivo no armazenamento interno do app.
         File arquivo = new File(getFilesDir(), NOME_ARQUIVO);
         try (FileOutputStream fos = new FileOutputStream(arquivo)) {
-            fos.write(conteudo.toString().getBytes());
+            // UTF-8 explícito: acentos viram múltiplos bytes; sem isso a leitura quebra.
+            fos.write(conteudo.toString().getBytes(StandardCharsets.UTF_8));
             Toast.makeText(this, "Relatório gerado com sucesso", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Toast.makeText(this, "Erro ao gerar relatório", Toast.LENGTH_SHORT).show();
@@ -109,10 +126,13 @@ public class RelatorioActivity extends AppCompatActivity {
         }
 
         StringBuilder conteudo = new StringBuilder();
-        try (FileInputStream fis = new FileInputStream(arquivo)) {
+        // InputStreamReader com UTF-8: decodifica caractere a caractere (não byte
+        // a byte), senão acentos multi-byte viram lixo na tela.
+        try (InputStreamReader reader =
+                     new InputStreamReader(new FileInputStream(arquivo), StandardCharsets.UTF_8)) {
             int caractere;
-            // Lê byte a byte até o fim do arquivo (-1).
-            while ((caractere = fis.read()) != -1) {
+            // Lê caractere a caractere até o fim do arquivo (-1).
+            while ((caractere = reader.read()) != -1) {
                 conteudo.append((char) caractere);
             }
             tvConteudo.setText(conteudo.toString());

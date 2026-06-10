@@ -4,6 +4,10 @@ Aplicativo Android (Java) para o **pós-venda de uma concessionária de seminovo
 Permite cadastrar clientes e veículos, registrar ocorrências (problemas) e agendar o
 diagnóstico do mecânico, além de gerar um relatório em arquivo `.txt`.
 
+Conta ainda com um **Painel** de resumo, **botão de voltar** em todas as telas
+internas e o controle de **garantia/cobrança** (veículo fora da garantia gera
+cobrança fixa; toda ocorrência gera um valor fixo de diagnóstico do mecânico).
+
 Projeto acadêmico construído usando **apenas as APIs vistas em aula**: banco SQLite
 puro com `SQLiteOpenHelper`, permissões em tempo de execução, câmera por `Intent`,
 `RecyclerView` com adapters próprios e Material Design.
@@ -62,6 +66,7 @@ br.com.posvendas
 └── activities/                → as telas do app
     ├── LoginActivity.java
     ├── MenuActivity.java
+    ├── DashboardActivity.java   → Painel de resumo (somente leitura)
     ├── ClientesActivity.java
     ├── VeiculosActivity.java
     ├── OcorrenciasActivity.java
@@ -85,10 +90,15 @@ Criado em `DatabaseHelper.onCreate()` com SQL explícito. São 4 tabelas:
 usuarios     (id, login, senha, perfil)
 clientes     (id, nome, telefone, email)
 veiculos     (id, cliente_id→clientes, modelo, ano, chassi, placa,
-              data_retirada, garantia_adicional, foto_caminho)
+              data_retirada, garantia_adicional, foto_caminho, valor_cobranca)
 ocorrencias  (id, veiculo_id→veiculos, descricao, data_registro,
-              status, data_diagnostico)
+              status, data_diagnostico, valor_diagnostico)
 ```
+
+> **Versão do banco = 2.** As colunas `valor_cobranca` (veículos) e
+> `valor_diagnostico` (ocorrências) foram adicionadas na versão 2. Ao subir a
+> versão, `onUpgrade()` recria as tabelas (estratégia simples do projeto), então
+> ao instalar por cima o banco antigo é refeito.
 
 **Relacionamentos (chaves estrangeiras):**
 
@@ -114,8 +124,17 @@ Valida campos vazios antes de consultar. Acerto → vai para o Menu; erro → To
 "Usuário ou senha inválidos".
 
 ### MenuActivity
-Apenas navegação: 5 botões (Clientes, Veículos, Ocorrências, Agenda, Relatório),
-cada um com ícone Material, abrindo a Activity correspondente por `Intent`.
+Apenas navegação: 6 botões (**Painel**, Clientes, Veículos, Ocorrências, Agenda,
+Relatório), cada um com ícone Material, abrindo a Activity correspondente por `Intent`.
+
+### DashboardActivity (Painel) — tela de resumo
+Tela **somente leitura** com contadores vindos do banco: total de ocorrências,
+nº de clientes, nº de veículos, ocorrências **abertas** (laranja) e **agendadas**
+(verde). Os números são recalculados em `onResume()`, então refletem sempre o
+estado atual. Botão **Atualizar** recarrega manualmente.
+
+> Todas as telas internas têm um **botão de voltar** (seta na `MaterialToolbar`)
+> que encerra a tela e retorna ao menu.
 
 ### ClientesActivity — CRUD completo
 - **Salvar** → `INSERT`.
@@ -132,10 +151,16 @@ cada um com ícone Material, abrindo a Activity correspondente por `Intent`.
 - Validações: campos vazios, **ano numérico**, **chassi com 17 caracteres** e
   **placa/chassi duplicados** (tratamento do `UNIQUE` — ver item 7).
 - Lista mostra a **miniatura da foto** carregada do caminho salvo no banco.
+- **Garantia/cobrança**: ao salvar, o app calcula se o veículo está fora da
+  garantia (ver item 8). Se estiver, grava uma **cobrança fixa de R$ 300,00**
+  (`valor_cobranca`) e avisa no Toast. A lista mostra *"Na garantia"* (verde) ou
+  *"Fora da garantia · R$ 300,00"* (laranja).
 
 ### OcorrenciasActivity
 - Spinner de veículo + descrição (multiline) + **Registrar**.
 - `INSERT` grava a **data atual automaticamente** e status **ABERTA**.
+- Gera automaticamente um **valor fixo de diagnóstico do mecânico de R$ 150,00**
+  (`valor_diagnostico`), exibido na lista e no relatório.
 - Lista mostra o status **colorido** (ABERTA = laranja, AGENDADA = verde).
 - Excluir com `AlertDialog`.
 
@@ -150,8 +175,11 @@ cada um com ícone Material, abrindo a Activity correspondente por `Intent`.
 ### RelatorioActivity
 - **Gerar Relatório** → percorre as ocorrências (`SELECT`) e grava o arquivo
   `relatorio.txt` em `getFilesDir()` usando **`FileOutputStream`**.
-- **Carregar Relatório** → lê o arquivo com **`FileInputStream`** e mostra num
-  `TextView` dentro de `ScrollView`. Se o arquivo não existir, avisa o usuário.
+- **Carregar Relatório** → lê o arquivo com **`FileInputStream`** (via
+  `InputStreamReader` em **UTF-8**) e mostra num `TextView` dentro de `ScrollView`.
+  Se o arquivo não existir, avisa o usuário.
+- Cada linha inclui o **valor do diagnóstico**. A escrita/leitura usa **UTF-8
+  explícito**, então acentos (Relatório, Veículo, Diagnóstico) saem corretos.
 
 ---
 
@@ -189,7 +217,30 @@ Tudo em `VeiculosActivity`. É o ponto mais cobrado:
 
 ---
 
-## 8. Roteiro sugerido para a apresentação
+## 8. Garantia e cobrança
+
+Regra usada para decidir se um veículo está **fora da garantia**:
+
+- Garantia padrão de **3 meses** (`Veiculo.GARANTIA_PADRAO_MESES`) a partir da
+  **data de retirada**.
+- O campo **garantia adicional** conta como **meses extras** (o app extrai só os
+  dígitos, então aceita "6" ou "6 meses"; texto inválido/vazio = 0 extra).
+- Se a data de hoje for **posterior** ao fim do prazo (retirada + 3 + extras), o
+  veículo está **fora da garantia**.
+
+Valores fixos aplicados:
+
+| Evento | Valor | Onde |
+|--------|-------|------|
+| Veículo cadastrado **fora da garantia** | **R$ 300,00** | `veiculos.valor_cobranca` |
+| **Diagnóstico** do mecânico (toda ocorrência) | **R$ 150,00** | `ocorrencias.valor_diagnostico` |
+
+A lógica de garantia fica em `Veiculo.estaForaDaGarantia(...)` (testável, sem
+depender de tela). A formatação em reais usa `Locale("pt","BR")` → `R$ 150,00`.
+
+---
+
+## 9. Roteiro sugerido para a apresentação
 
 1. Mostrar o **login** com `admin / admin123` e explicar o `SELECT` de validação.
 2. Cadastrar um **cliente** (mostrar INSERT, depois editar = UPDATE, depois a
@@ -207,7 +258,7 @@ Tudo em `VeiculosActivity`. É o ponto mais cobrado:
 
 ---
 
-## 9. Critérios de aceite atendidos
+## 10. Critérios de aceite atendidos
 
 - ✔ Compila e roda em API 24+ sem ajuste manual (`BUILD SUCCESSFUL`).
 - ✔ Login `admin/admin123` funciona no primeiro boot.
@@ -218,3 +269,9 @@ Tudo em `VeiculosActivity`. É o ponto mais cobrado:
   agendamento → relatório `.txt` gerado e lido.
 - ✔ Nenhum campo aceita submissão vazia.
 - ✔ Dados persistem após fechar e reabrir o app.
+- ✔ Painel mostra contadores corretos (clientes, veículos, abertas, agendadas).
+- ✔ Botão de voltar em todas as telas internas.
+- ✔ Veículo fora da garantia gera cobrança de R$ 300,00; ocorrência gera
+  diagnóstico de R$ 150,00.
+- ✔ Relatório `.txt` com acentos corretos (UTF-8).
+- ✔ Ícone do app personalizado (carro sobre fundo azul da marca).
